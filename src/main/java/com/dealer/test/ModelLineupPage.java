@@ -8,7 +8,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.springframework.stereotype.Component;
 
-@Component("mlp")
+
 public class ModelLineupPage extends CmsPage {
 	
 	private static final By min_price_slider = By.cssSelector(".ui-slider-value .min-price"); 

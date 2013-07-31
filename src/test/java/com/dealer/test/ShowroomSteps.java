@@ -33,7 +33,7 @@ public class ShowroomSteps {
 
 	@Given("^I go to model lineup page$")
 	public void i_go_to_cms_page() {
-		cms = new CmsPage();
+		cms = new CmsPage(sm);
 		cms.openPage("ddctest0006", "/showroom/index.htm");	
 	}
 	
@@ -42,14 +42,14 @@ public class ShowroomSteps {
 	public void blee(String expectedTitle) {
 		
 		this.expectedTitle = expectedTitle;
-		mlp = new ModelLineupPage();
+		mlp = new ModelLineupPage(sm);
 		mlp.clickShowroomVehicle(expectedTitle);	
 	}
 	
 	
 	@Then("^the title should match$")
 	public void blah() {
-		sdp = new ShowroomDetailsPage();
+		sdp = new ShowroomDetailsPage(sm);
 		String displayedTitle =  sdp.getModelTitle();
 		
 		assertThat(displayedTitle, equalTo(expectedTitle));	

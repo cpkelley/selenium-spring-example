@@ -32,6 +32,7 @@ public class ShowroomSpringTest {
 	CmsPage cms ;
 	ModelLineupPage mlp;	
 	ShowroomDetailsPage sdp ;
+	
 	@Autowired
 	private SeleniumManager sm;
 	

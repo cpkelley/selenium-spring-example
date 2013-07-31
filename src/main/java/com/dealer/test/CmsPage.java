@@ -10,7 +10,7 @@ import org.openqa.selenium.WebElement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-@Component("cms")
+
 public class CmsPage extends Page {
 
 	private String page = "/index.htm";
