@@ -1,0 +1,189 @@
+[0.000][INFO]:      ChromeDriver 26.0.1383.0 /private/var/folders/j_/p55zyfs10n1c6j91kn3p28q000060h/T/chromedriver_5225621671280104661
+[0.701][FINE]:      Initializing session with capabilities {
+   "browserName": "chrome",
+   "platform": "ANY",
+   "version": ""
+}
+
+[0.701][INFO]:      Launching chrome: /Applications/Google Chrome.app/Contents/MacOS/Google Chrome --disable-hang-monitor --disable-prompt-on-repost --dom-automation --full-memory-crash-report --no-default-browser-check --no-first-run --disable-background-networking --disable-sync --disable-translate --disable-web-resources --safebrowsing-disable-auto-update --safebrowsing-disable-download-protection --disable-client-side-phishing-detection --disable-component-update --disable-default-apps --enable-logging --log-level=1 --use-mock-keychain --ignore-certificate-errors about:blank
+[1.096][INFO]:      Connected to Chrome successfully. Version: 28.0.1500.95
+[1.105][FINE]:      Command received (/session/8bdf90cbbe187185025fc5917b34e101)
+[1.105][FINE]:      Command finished (/session/8bdf90cbbe187185025fc5917b34e101) with response {
+   "sessionId": "8bdf90cbbe187185025fc5917b34e101",
+   "status": 0,
+   "value": {
+      "acceptSslCerts": false,
+      "applicationCacheEnabled": false,
+      "browserConnectionEnabled": false,
+      "browserName": "chrome",
+      "chrome.chromedriverVersion": "26.0.1383.0",
+      "cssSelectorsEnabled": true,
+      "databaseEnabled": false,
+      "handlesAlerts": true,
+      "javascriptEnabled": true,
+      "locationContextEnabled": false,
+      "nativeEvents": true,
+      "platform": "mac",
+      "rotatable": false,
+      "takesScreenshot": true,
+      "version": "28.0.1500.95",
+      "webStorageEnabled": true
+   }
+}
+
+[1.124][FINE]:      Command received (/session/8bdf90cbbe187185025fc5917b34e101/window/current/size) with params {
+   "height": 768,
+   "width": 1024,
+   "windowHandle": "current"
+}
+
+[1.124][FINER]:     Waiting for all views to stop loading...
+[1.124][FINER]:     Done waiting for all views to stop loading
+[1.206][FINER]:     Waiting for all views to stop loading...
+[1.209][FINER]:     Done waiting for all views to stop loading
+[1.209][FINE]:      Command finished (/session/8bdf90cbbe187185025fc5917b34e101/window/current/size) with response {
+   "sessionId": "8bdf90cbbe187185025fc5917b34e101",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[1.241][FINE]:      Command received (/session/8bdf90cbbe187185025fc5917b34e101/window_handle)
+[1.241][FINER]:     Waiting for all views to stop loading...
+[1.241][FINER]:     Done waiting for all views to stop loading
+[1.241][FINER]:     Waiting for all views to stop loading...
+[1.241][FINER]:     Done waiting for all views to stop loading
+[1.241][FINE]:      Command finished (/session/8bdf90cbbe187185025fc5917b34e101/window_handle) with response {
+   "sessionId": "8bdf90cbbe187185025fc5917b34e101",
+   "status": 0,
+   "value": "f1-2"
+}
+
+[1.297][FINE]:      Command received (/session/8bdf90cbbe187185025fc5917b34e101/url) with params {
+   "url": "http://ddctest0006.cms.qa.dealer.com/showroom/index.htm"
+}
+
+[1.297][FINER]:     Waiting for all views to stop loading...
+[1.297][FINER]:     Done waiting for all views to stop loading
+[2.328][FINER]:     Waiting for all views to stop loading...
+[2.328][FINER]:     Done waiting for all views to stop loading
+[2.328][FINE]:      Command finished (/session/8bdf90cbbe187185025fc5917b34e101/url) with response {
+   "sessionId": "8bdf90cbbe187185025fc5917b34e101",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[2.347][FINE]:      Command received (/session/8bdf90cbbe187185025fc5917b34e101/elements) with params {
+   "using": "css selector",
+   "value": ".hproduct"
+}
+
+[2.347][FINER]:     Waiting for all views to stop loading...
+[2.348][FINER]:     Done waiting for all views to stop loading
+[2.361][FINER]:     Waiting for all views to stop loading...
+[2.362][FINER]:     Done waiting for all views to stop loading
+[2.362][FINE]:      Command finished (/session/8bdf90cbbe187185025fc5917b34e101/elements) with response {
+   "sessionId": "8bdf90cbbe187185025fc5917b34e101",
+   "status": 0,
+   "value": [ {
+      "ELEMENT": ":wdc:1375302212326"
+   }, {
+      "ELEMENT": ":wdc:1375302212327"
+   }, {
+      "ELEMENT": ":wdc:1375302212328"
+   }, {
+      "ELEMENT": ":wdc:1375302212329"
+   }, {
+      "ELEMENT": ":wdc:1375302212330"
+   }, {
+      "ELEMENT": ":wdc:1375302212331"
+   }, {
+      "ELEMENT": ":wdc:1375302212332"
+   }, {
+      "ELEMENT": ":wdc:1375302212333"
+   }, {
+      "ELEMENT": ":wdc:1375302212334"
+   }, {
+      "ELEMENT": ":wdc:1375302212335"
+   } ]
+}
+
+[2.370][FINE]:      Command received (/session/8bdf90cbbe187185025fc5917b34e101/element/:wdc:1375302212326/element) with params {
+   "id": ":wdc:1375302212326",
+   "using": "css selector",
+   "value": ".fn.h3 a"
+}
+
+[2.370][FINER]:     Waiting for all views to stop loading...
+[2.370][FINER]:     Done waiting for all views to stop loading
+[2.385][FINER]:     Waiting for all views to stop loading...
+[2.385][FINER]:     Done waiting for all views to stop loading
+[2.385][FINE]:      Command finished (/session/8bdf90cbbe187185025fc5917b34e101/element/:wdc:1375302212326/element) with response {
+   "sessionId": "8bdf90cbbe187185025fc5917b34e101",
+   "status": 0,
+   "value": {
+      "ELEMENT": ":wdc:1375302212336"
+   }
+}
+
+[2.387][FINE]:      Command received (/session/8bdf90cbbe187185025fc5917b34e101/element/:wdc:1375302212336/text)
+[2.387][FINER]:     Waiting for all views to stop loading...
+[2.388][FINER]:     Done waiting for all views to stop loading
+[2.411][FINER]:     Waiting for all views to stop loading...
+[2.411][FINER]:     Done waiting for all views to stop loading
+[2.411][FINE]:      Command finished (/session/8bdf90cbbe187185025fc5917b34e101/element/:wdc:1375302212336/text) with response {
+   "sessionId": "8bdf90cbbe187185025fc5917b34e101",
+   "status": 0,
+   "value": "2014 Mazda CX-5 SUV"
+}
+
+[2.414][FINE]:      Command received (/session/8bdf90cbbe187185025fc5917b34e101/element/:wdc:1375302212326/click) with params {
+   "id": ":wdc:1375302212326"
+}
+
+[2.414][FINER]:     Waiting for all views to stop loading...
+[2.414][FINER]:     Done waiting for all views to stop loading
+[2.443][WARNING]:   Element's descendant would receive the click. Consider clicking the descendant instead. Descendant: <img src="http://imageonthefly.autodatadirect.com/images?width=320&amp;height=240&amp;img=USC40MAS061B021001.jpg" alt="" title="" class="photo thumb">
+[2.455][FINER]:     Waiting for all views to stop loading...
+[3.766][FINER]:     Done waiting for all views to stop loading
+[3.766][FINE]:      Command finished (/session/8bdf90cbbe187185025fc5917b34e101/element/:wdc:1375302212326/click) with response {
+   "sessionId": "8bdf90cbbe187185025fc5917b34e101",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[3.773][FINE]:      Command received (/session/8bdf90cbbe187185025fc5917b34e101/element) with params {
+   "using": "css selector",
+   "value": ".callout .inner2 h1"
+}
+
+[3.773][FINER]:     Waiting for all views to stop loading...
+[3.773][FINER]:     Done waiting for all views to stop loading
+[3.788][FINER]:     Waiting for all views to stop loading...
+[3.788][FINER]:     Done waiting for all views to stop loading
+[3.788][FINE]:      Command finished (/session/8bdf90cbbe187185025fc5917b34e101/element) with response {
+   "sessionId": "8bdf90cbbe187185025fc5917b34e101",
+   "status": 0,
+   "value": {
+      "ELEMENT": ":wdc:1375302213753"
+   }
+}
+
+[3.791][FINE]:      Command received (/session/8bdf90cbbe187185025fc5917b34e101/element/:wdc:1375302213753/text)
+[3.791][FINER]:     Waiting for all views to stop loading...
+[3.791][FINER]:     Done waiting for all views to stop loading
+[3.808][FINER]:     Waiting for all views to stop loading...
+[3.808][FINER]:     Done waiting for all views to stop loading
+[3.808][FINE]:      Command finished (/session/8bdf90cbbe187185025fc5917b34e101/element/:wdc:1375302213753/text) with response {
+   "sessionId": "8bdf90cbbe187185025fc5917b34e101",
+   "status": 0,
+   "value": "2014 Mazda\nCX-5 SUV"
+}
+
+[3.815][FINE]:      Command received (/session/8bdf90cbbe187185025fc5917b34e101)
+[3.871][INFO]:      Chrome shutdown
