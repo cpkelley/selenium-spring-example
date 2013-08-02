@@ -4,3 +4,7 @@
 *.class
 target/
 target/
+
+chromedriver.log
+
+chromedriver.log
