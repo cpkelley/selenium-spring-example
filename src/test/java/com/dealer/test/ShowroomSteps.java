@@ -20,20 +20,18 @@ import cucumber.api.junit.Cucumber;
 
 public class ShowroomSteps {
 
-	
+	@Autowired
 	CmsPage cms ;
+	@Autowired
 	ModelLineupPage mlp;	
+	@Autowired
 	ShowroomDetailsPage sdp ;
 
-	@Autowired
-	private SeleniumManager sm;
-
-	
 	String expectedTitle; 
 
 	@Given("^I go to model lineup page$")
 	public void i_go_to_cms_page() {
-		cms = new CmsPage(sm);
+		//cms = new CmsPage();
 		cms.openPage("ddctest0006", "/showroom/index.htm");	
 	}
 	
@@ -42,14 +40,14 @@ public class ShowroomSteps {
 	public void blee(String expectedTitle) {
 		
 		this.expectedTitle = expectedTitle;
-		mlp = new ModelLineupPage(sm);
+		//mlp = new ModelLineupPage();
 		mlp.clickShowroomVehicle(expectedTitle);	
 	}
 	
 	
 	@Then("^the title should match$")
 	public void blah() {
-		sdp = new ShowroomDetailsPage(sm);
+		//sdp = new ShowroomDetailsPage();
 		String displayedTitle =  sdp.getModelTitle();
 		
 		assertThat(displayedTitle, equalTo(expectedTitle));	

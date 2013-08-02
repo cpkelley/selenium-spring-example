@@ -10,7 +10,7 @@ import org.openqa.selenium.WebElement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-
+@Component("cms")
 public class CmsPage extends Page {
 
 	private String page = "/index.htm";
@@ -32,7 +32,7 @@ public class CmsPage extends Page {
 	public void open(String accountId) {
 		String page = "http://"
 			+ accountId 
-			+ sm.getCms()
+			+ sm.getCmsHost()
 			+ "/index.htm";
 		
 		logger.info("Opening: " +page) ;
@@ -43,7 +43,7 @@ public class CmsPage extends Page {
 	
 	public void openPage(String accountId, String pageURL) {
 		String page = "http://"+ accountId 
-			+ sm.getCms()
+			+ sm.getCmsHost()
 			+ pageURL;
 		 
 		logger.info("Opening: "+page) ;

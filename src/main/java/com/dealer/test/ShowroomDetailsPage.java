@@ -9,7 +9,7 @@ import org.openqa.selenium.support.FindBy;
 import org.springframework.stereotype.Component;
 
 
-
+@Component("sdp")
 public class ShowroomDetailsPage extends CmsPage {
 
 	private static final String OVERVIEW_TAB = "//ul[contains(@class,'ui-tabs-nav')]/li/a[contains(.,'Overview')]";

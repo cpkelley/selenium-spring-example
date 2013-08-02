@@ -23,6 +23,7 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.chrome.ChromeDriverService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 
 import com.thoughtworks.selenium.Selenium;
 
@@ -39,11 +40,15 @@ public class SeleniumManager {
 	private String browser;
 	public String baseURL;
 	public String environment;
-	public String cms;
-	public String sauce_host = "http://chriskelley:da51110b-49ea-4d30-a93d-4f20826352ef@ondemand.saucelabs.com:80/wd/hub";
-	public String base_url = "http://www.roimotors.com";
-
 	
+	@Value("${cms.host}")
+	public String cmsHost;
+	@Value("${cc.host}")
+	public String ccHost;
+	@Value("$baseUrl")
+	public String baseUrl;
+	@Value("$sauceHost")
+	public String sauceHost;
 	
 		
 	public SeleniumManager() {
@@ -172,7 +177,7 @@ public class SeleniumManager {
 	private WebDriver getSauceDriver() throws MalformedURLException {
 
         driver = new RemoteWebDriver(
-           new URL(sauce_host),
+           new URL(sauceHost),
            getCapabilities(browser));
         
         logger.info("using sauce labs for webdriver");
@@ -199,19 +204,17 @@ public class SeleniumManager {
 		
 		setTo1024by768();
 		
-		if(driver!=null && base_url != null){
+		if(driver!=null && baseUrl != null){
 			//And create an base selenium1 instance from driver
 			selenium = new WebDriverBackedSelenium(driver,
 					//baseURL doesn't need to be dynamic anymore. Sticking it in properties
-					base_url); 
+					baseUrl); 
 			return true;
 		} else{
 			logger.error("This used to default to Selenium 1. Now I don't know what will happen. " +
 					"\nBut Let's log and error. ");
 			return false;
 		}
-		
-		
 		
 		
 	}
@@ -291,13 +294,13 @@ public class SeleniumManager {
 		
 	}
 	
-	public void setCms(String cms) {
-		this.cms = cms;
+	public void setCmsHost(String cmsHost) {
+		this.cmsHost = cmsHost;
 	}
 
 
-	public String getCms() {
-		return cms;
+	public String getCmsHost() {
+		return cmsHost;
 	}
 	
 }
