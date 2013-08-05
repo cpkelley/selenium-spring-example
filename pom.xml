@@ -5,7 +5,13 @@
 	<artifactId>selenium-spring</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 
+
 	<dependencies>
+	       <dependency>
+            <groupId>com.dealer</groupId>
+            <artifactId>ddc-spring</artifactId>
+            <version>3.0.8</version>
+        </dependency>
 		<dependency>
 			<groupId>org.hamcrest</groupId>
 			<artifactId>hamcrest-all</artifactId>

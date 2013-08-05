@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+import javax.annotation.PostConstruct;
+
 import org.apache.commons.lang3.time.StopWatch;
 import org.apache.log4j.Logger;
 import org.junit.Assert;
@@ -28,7 +30,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-
+@Component
 public class Page implements SearchContext {
 	
 	@Autowired
@@ -42,13 +44,16 @@ public class Page implements SearchContext {
 	protected long defaultTimeoutInMilliseconds ;
 	
 	public Page() {
+			
+	}
+	
+	@PostConstruct
+	public void init() {
 		driver = sm.getDriver();
 		PageFactory.initElements(driver, this);
 		wait = new WebDriverWait(driver,15);
 		logger = Logger.getLogger(this.getClass().getSimpleName());
-		
 	}
-	
 	
 	public Page(SeleniumManager sm) {
 		this.sm = sm;

@@ -5,3 +5,8 @@ Scenario: Test Showroom
   Given I go to model lineup page
   When I go to model showroom page for "2014 Mazda CX-5 SUV"
   Then the title should match
+
+ Scenario: Test Showroom
+  Given I go to model lineup page
+  When I go to model showroom page for "2014 Mazda CX-9 SUV"
+  Then the title should match

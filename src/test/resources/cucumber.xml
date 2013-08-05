@@ -12,11 +12,16 @@ http://www.springframework.org/schema/beans http://www.springframework.org/schem
 	<context:annotation-config/>
  	<bean id="sm" class="com.dealer.test.SeleniumManager" init-method="start" destroy-method="stop">
 		<property name="browser" value="*googlechrome" />
-		<property name="host" value="10.128.8.139" />
+		<property name="host" value="localhost" />
 		<property name="port" value="4444" />
 		<property name="environment" value="qa" />		
-		<property name="cms" value=".cms.qa.dealer.com" />
+		<!--
+		<property name="cms_host" value="${cms.host}" />
+		<property name="cc_host" value="${cc.host}" />
+		-->
 	</bean>
+	<import resource="classpath:META-INF/envContext.xml"/>
+	<!-- EnvironmentPropertyPlaceholderConfigurer  --> 
 	
 	
 </beans>
