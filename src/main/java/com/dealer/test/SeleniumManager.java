@@ -45,9 +45,9 @@ public class SeleniumManager {
 	public String cmsHost;
 	@Value("${cc.host}")
 	public String ccHost;
-	@Value("$baseUrl")
+	@Value("${baseUrl}")
 	public String baseUrl;
-	@Value("$sauceHost")
+	@Value("${sauceHost}")
 	public String sauceHost;
 	
 		
