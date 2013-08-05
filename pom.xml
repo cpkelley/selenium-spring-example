@@ -5,33 +5,12 @@
 	<artifactId>selenium-spring</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 
+
 	<dependencies>
 	       <dependency>
             <groupId>com.dealer</groupId>
             <artifactId>ddc-spring</artifactId>
-            <version>3.0.1</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>log4j</artifactId>
-                    <groupId>log4j</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>commons-logging</artifactId>
-                    <groupId>commons-logging</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>slf4j-log4j12</artifactId>
-                    <groupId>org.slf4j</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>slf4j-api</artifactId>
-                    <groupId>org.slf4j</groupId>
-                </exclusion>
-                <exclusion>
-                    <groupId>javax.transaction</groupId>
-                    <artifactId>jta</artifactId>
-                </exclusion>
-            </exclusions>
+            <version>3.0.8</version>
         </dependency>
 		<dependency>
 			<groupId>org.hamcrest</groupId>
