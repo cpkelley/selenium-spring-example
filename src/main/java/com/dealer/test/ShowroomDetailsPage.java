@@ -12,16 +12,16 @@ import org.springframework.stereotype.Component;
 @Component("sdp")
 public class ShowroomDetailsPage extends CmsPage {
 
-	private static final String OVERVIEW_TAB = "//ul[contains(@class,'ui-tabs-nav')]/li/a[contains(.,'Overview')]";
-	private static final String MODELS_TAB = "//ul[contains(@class,'ui-tabs-nav')]/li/a[contains(.,'Models')]";
-	private static final String OVERVIEW = "//div[contains(@id,'overview')]";
-	private static final String MODELS = "//div[contains(@id,'models')]";
-	private static final String PRICE =  "//strong[preceding-sibling::em[contains(.,'Starting at')]]";
-	private static final String FUEL_ECONOMY = "//div[contains(@class,'fuel-efficiency')]";
-	private static final String CITY_MPG = "//div[contains(.,'City MPG')]";
-	private static final String HWY_MPG = "//div[contains(.,'Hwy MPG')]";
-	private static final String MODEL_SWATCH = "//ul[contains(@class,'swatches')]";
-	private By trim_model = By.cssSelector(".model strong");
+	private static final By overview_tab = By.xpath("//ul[contains(@class,'ui-tabs-nav')]/li/a[contains(.,'Overview')]");
+	private static final By models_tab = By.xpath("//ul[contains(@class,'ui-tabs-nav')]/li/a[contains(.,'Models')]");
+	private static final By overview = By.cssSelector("#overview");
+	private static final By models = By.id("models");
+	private static final By price =  By.xpath("//strong[preceding-sibling::em[contains(.,'Starting at')]]");
+	private static final By fuel_economy = By.cssSelector(".fuel-efficiency");
+	private static final By city_mpg = By.xpath("//div[contains(.,'City MPG')]");
+	private static final By highway_mpg = By.xpath("//div[contains(.,'Hwy MPG')]");
+	private static final By model_swatch = By.className("swatches");
+	private static final By trim_model = By.cssSelector(".model strong");
 	
 	@FindBy (css = ".callout .inner2 h1")
 	WebElement model_title;
@@ -39,38 +39,36 @@ public class ShowroomDetailsPage extends CmsPage {
 	}
 
 	public void clickOverviewTab() {
-		driver.findElement(By.xpath(OVERVIEW_TAB)).click();
-		this.waitForElement(By.xpath(OVERVIEW), true);
+		driver.findElement(overview_tab).click();
+		waitForElementDisplayed(overview);
 	}
 	
 	
 	public void clickModelsTab() {
-		driver.findElement(By.xpath(MODELS_TAB)).click();
-		this.waitForElement(By.xpath(MODELS), true);
+		driver.findElement(models_tab).click();
+		waitForElementDisplayed(models);
 
 	}
 		
 	public String getPrice() {
-		return this.isElementPresentAndDisplayed(By.xpath(PRICE)) ?
-				driver.findElement(By.xpath(PRICE)).getText() :
+		return this.isElementPresentAndDisplayed(price) ?
+				driver.findElement(price).getText() :
 					null;	
 	}
 	
 	public boolean hasFuelEconomyDisplayed() {
-		if (isElementPresentAndDisplayed(By.xpath(FUEL_ECONOMY)) &&
-				isElementPresentAndDisplayed(By.xpath(CITY_MPG)) &&
-				isElementPresentAndDisplayed(By.xpath(HWY_MPG)))
-				return true;
-		else return false;
+		 return isElementPresentAndDisplayed(fuel_economy) &&
+				isElementPresentAndDisplayed(city_mpg) &&
+				isElementPresentAndDisplayed(highway_mpg);
 	}
 	
 	public boolean hasModelSwatch() {
-		return this.isElementPresentAndDisplayed(By.xpath(MODEL_SWATCH));
+		return isElementPresentAndDisplayed(model_swatch);
 	}
 	
 	
 	public boolean hasOverviewDisplayed() {
-		return this.isElementPresentAndDisplayed(By.xpath(OVERVIEW));
+		return isElementPresentAndDisplayed(overview);
 	}
 	
 	public String getModelTitle() {
