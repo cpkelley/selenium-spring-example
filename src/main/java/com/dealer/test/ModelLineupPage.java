@@ -3,16 +3,26 @@ package com.dealer.test;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.hamcrest.MatcherAssert.*;
+import static org.hamcrest.Matchers.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.springframework.stereotype.Component;
 
+import com.google.common.base.CharMatcher;
+
+/**
+ * Page Object representaion of the showroom listings page (/showroom/index.htm).
+ * Inherets characteristics of the CMS Page. 
+ * 
+ * @author ddcchrisk
+ *
+ */
 @Component("mlp")
 public class ModelLineupPage extends CmsPage {
 	
 	private static final By min_price_slider = By.cssSelector(".ui-slider-value .min-price"); 
-	private static final By max_price_slider = By.cssSelector(".ui-slider-value .max-price");
 	protected By filtered_vehicle_item = By.cssSelector(".hproduct[style*=\"opacity: 1\"]");
 	private String page = "/showroom/index.htm";
 	
@@ -21,20 +31,11 @@ public class ModelLineupPage extends CmsPage {
 	
 	public ModelLineupPage() {
 		super();
-		this.setPage(page);
+		
 	}
 	
 	public ModelLineupPage(SeleniumManager sm) {
 		super(sm);
-		this.setPage(page);
-	}
-	
-	public String getMinPriceLabel() {
-		return findElement(min_price_slider).getText();
-	}
-	
-	public String getMaxPriceLabel() {
-		return findElement(max_price_slider).getText();
 		
 	}
 	
@@ -42,7 +43,6 @@ public class ModelLineupPage extends CmsPage {
 		return this.isElementPresentAndDisplayed(filtered_vehicle_item, 6000);
 		
 	}
-	
 	
 	public List<VehicleListing> getDisplayedVehiclesList() {
 		ArrayList<VehicleListing> dvl = new ArrayList<VehicleListing>();	
@@ -70,11 +70,6 @@ public class ModelLineupPage extends CmsPage {
 			this.vehiclelisting = vehiclelisting;
 		}
 		
-
-		@Override
-		public String getPrice() {
-			return formatPrice(vehiclelisting.findElement(price).getText());
-		}
 
 		@Override
 		public String getTitle() {
@@ -131,11 +126,18 @@ public class ModelLineupPage extends CmsPage {
 			return Integer.parseInt(
 					vehiclelisting.getAttribute("data-maxprice"));
 		}
+
+		@Override
+		public String getPrice() {
+			return CharMatcher.DIGIT.retainFrom(
+					vehiclelisting.findElement(price).getText());
+		}
 			
 	}
 
 	public boolean clickShowroomVehicle(String modelTitle) {
 		Boolean result = false;
+				
 		for (VehicleListing model : this.getDisplayedVehiclesList()) {
 			if (model.getTitle().contains(modelTitle)) {
 				model.click();
@@ -143,6 +145,10 @@ public class ModelLineupPage extends CmsPage {
 				break;
 			}
 		}
+		
+		assertThat("Unable to find Model Title: '" + modelTitle + "' on the current page",
+				result, is(notNullValue()));
+		
 		return result;
 		
 	}
@@ -154,6 +160,21 @@ public class ModelLineupPage extends CmsPage {
 	public Boolean isSliderDisplayed() {
 		return this.isElementPresentAndDisplayed(min_price_slider);
 	}
+
+	public void hasModel(String expectedTitle) {
+		List<VehicleListing> displayedModels = this.getDisplayedVehiclesList();
+		List<String> displayedTitles = new ArrayList<String>();
+		
+		for (VehicleListing model : displayedModels) {
+			displayedTitles.add(model.getTitle());
+			
+		}
+		
+		assertThat("Unable to finde expected Showroom Model: "+ expectedTitle,  
+				displayedTitles.contains(expectedTitle));
+		
+	}
+
 }
 
 

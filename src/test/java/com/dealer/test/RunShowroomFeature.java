@@ -5,7 +5,8 @@ import org.junit.runner.RunWith;
 import cucumber.api.junit.Cucumber;
 
 @RunWith(Cucumber.class)
-@Cucumber.Options(features = "classpath:showroom.feature")
+@Cucumber.Options(format = {"pretty", "html:target/cuke-reports"},
+		features = "classpath:showroom.feature")
 public class RunShowroomFeature {
 
 }

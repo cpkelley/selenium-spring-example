@@ -1,7 +1,6 @@
 package com.dealer.test;
 
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import javax.annotation.PostConstruct;
@@ -10,12 +9,8 @@ import org.apache.commons.lang3.time.StopWatch;
 import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.SearchContext;
-import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -30,6 +25,11 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+/**
+ * Top level page object class. All other page objects should inheret from this class or a subclass
+ * @author ddcchrisk
+ *
+ */
 @Component
 public class Page implements SearchContext {
 	
@@ -62,14 +62,6 @@ public class Page implements SearchContext {
 		logger = Logger.getLogger(this.getClass().getSimpleName());
 	}
 	
-	public SeleniumManager getSm() {
-		return sm;
-	}
-
-
-	public void setSm(SeleniumManager sm) {
-		this.sm = sm;
-	}
 
 	private String timeoutErrorMessage(By by ) {
 		return "Unable to find visibility of element located by " +by + " within " + defaultTimeout + " seconds \n "
@@ -80,70 +72,58 @@ public class Page implements SearchContext {
 				"\nSee image below (if available) for clues.\n If all else fails, RERUN THE TEST MANUALLY! - CPK\n\n";
 	}
 		
-	protected WebElement waitForElement(By by, Boolean isDisplayed) {
-		try {
-			wait.until(ExpectedConditions.presenceOfElementLocated(by));
-			return driver.findElement(by);
-		} catch (TimeoutException te) {
-			throw new TimeoutException ("Wait timed out. Unable to find " +by.toString() + ".\n " + te); 
-		}
-	}
-
 	/**
-	* Useful for waiting for ajaxian elements to appear. Uses the specified duration before timing out
-	* Proceeds with no result if element is displayed 
+	* waits pages elements to appear, until the specified timeout in milliseconds
+	* If the element is not found and/or not displayed
+	* within the specified time, a timeout exception is thrown. 
+	* 
 	* @author ddcchrisk
-	* @return nothing 
 	* @throws Timeout Exception if not found
 	* @param duration - the amount of time to wait in milliseconds for the element to be visible
-	* @param by - the element By selector
+	* @param locator - the element locator 
 	*/		
-	protected WebElement waitForElementDisplayed(By by, long durationInMilliseconds) {
+	protected WebElement waitForElementDisplayed(By locator, long durationInMilliseconds) {
 		long timeoutInSeconds = durationInMilliseconds/1000; 
 		FluentWait<WebDriver> tempwait = new WebDriverWait(driver,timeoutInSeconds);
-			tempwait.until(ExpectedConditions.visibilityOfElementLocated(by));
-			//tempwait.until(new ElementPresent(by,true));
-			return driver.findElement(by);
+			return tempwait.until(ExpectedConditions.visibilityOfElementLocated(locator));
+			
 	}
 	
-	protected WebElement waitForElementDisplayed(final WebElement parent, final By by) {
-		this.waitForElementVisible(parent);
+	/**
+	* Waits for the page elements to appear as a sibling of the specified parent WebElement. 
+	* If the element is not found and/or not displayed
+	* within the default timeout in milliseconds, a timeout exception is thrown. 
+	* 
+	* @author ddcchrisk
+	* @throws Timeout Exception if not found
+	* @return the WebElement found on the page, and is displayed
+	* @param parent  the parent element of which to find the child element
+	* 	* @param locator  the element locator 
+	*/
+	protected WebElement waitForElementDisplayed(final WebElement parent, final By locator) {
+		wait.until(ExpectedConditions.visibilityOf(parent));
 		try {
 			wait.until(new ExpectedCondition<Boolean>() {
 				@Override
 				public Boolean apply(WebDriver driver) {
-					return parent.findElement(by).isDisplayed();
+					return parent.findElement(locator).isDisplayed();
 				} 
 			});	
 		} catch (NoSuchElementException e) {
-			throw new NoSuchElementException (timeoutErrorMessage(by) + e);
+			throw new NoSuchElementException (timeoutErrorMessage(locator) + e);
 		} catch (TimeoutException e) {
-			throw new TimeoutException (timeoutErrorMessage(by) + e);
+			throw new TimeoutException (timeoutErrorMessage(locator) + e);
 		}
-		return parent.findElement(by);
+		return parent.findElement(locator);
 	}
 		
-	protected WebElement waitForElementPresent(final WebElement parent,	final By by) {
-		try {
-			wait.until(new ExpectedCondition<WebElement>() {
-				@Override
-				public WebElement apply(WebDriver driver) {
-					return parent.findElement(by);
-				}
-			}); 
-		} catch (NoSuchElementException e) {
-			throw new NoSuchElementException (timeoutErrorMessage(by) + e);
-		} catch (TimeoutException e) {
-			throw new TimeoutException (timeoutErrorMessage(by) + e);
-		}
-		return parent.findElement(by);
-	}
-	
 	/**
-	* Useful for waiting for ajaxian elements to appear (not hidden). Uses the default timeout
-	* Proceeds with no result if element is displayed 
+	* Waits for the page element to appear specified by the locator. 
+	* If the element is not found and/or not displayed
+	* within the default timeout, a timeout exception is thrown. 
+	*
 	* @author ddcchrisk
-	* @return nothing 
+	* @return the WebElement found on the page, and is displayed
 	* @throws Timeout Exception if not found
 	* @param by - the element By selector
 	*/	
@@ -161,26 +141,27 @@ public class Page implements SearchContext {
 
 
 	/**
-	* @author ddcchrisk
-	* Checks to see if an element exists. Does not care if element is displayed or hidden
-	* @return true if the element exists
-	* @param by - the element By selector
+	 * Returns true if an element exists on the page. Does not care if element is displayed or hidden
+	 * 
+	 * @author ddcchrisk
+	 * @return true if the element exists on the page, doesn't check for visibility
+	 * @param locator - the element By selector
 	*/		
-	public boolean isElementPresent(By by) {
+	public boolean isElementPresent(By locator) {
 		try {
-			driver.findElement(by);
+			driver.findElement(locator);
 			return true;
 		}	catch (NoSuchElementException nse) {
-				logger.debug("Element '"+ by.toString() + "' not found. Returning false");
+				logger.debug("Element '"+ locator.toString() + "' not found. Returning false");
 				return false;
 			}
 	}
 
 	/**
-	* Waits to see if an element exists. Does care if element is displayed or hidden
-	* It will wait until the specified duration and then give ups
+	* Waits to see if an element exists based on specified time. Does care if element is displayed or hidden
+	*  
 	* @author ddcchrisk
-	* @return true if the element exists
+	* @return true if the element exists, doesn't check for visibility
 	* @param by - the element By selector
 	* @param duration - time to wait for the element to appear in milliseconds
 	*/		
@@ -196,37 +177,22 @@ public class Page implements SearchContext {
 	}
 	
 	/**
-	* Checks to see if an element exists and is displayed (visible) on the page
+	 * Returns true if an element exists on the page AND is displayed.
+	 * If the element is present, but not displayed it will return false.
+	 *  
 	* @author ddcchrisk
-	* @return true if the element is displayed
-	* @param by - the element By selector
+	* @return true if the element is present and displayed
+	* @param locator - the element By selector
 	*/	
-	public boolean isElementPresentAndDisplayed(By by) {
-		if (isElementPresent(by)) {
-		   return driver.findElement(by).isDisplayed();
+	public boolean isElementPresentAndDisplayed(By locator) {
+		if (isElementPresent(locator)) {
+		   return driver.findElement(locator).isDisplayed();
 		} else {
-			logger.debug("Unable to find element: " +by.toString());
+			logger.debug("Unable to find element: " +locator.toString());
 		   return false;
 		}
 	}
 	
-	/**
-	* Checks to see if an element below a parent element exists and is displayed (visible) on the page
-	* @author ddcchrisk
-	* @return true if the element is displayed
-	* @param by - the element By selector
-	*/
-	public boolean isElementPresentAndDisplayed(WebElement parent,
-			By by) {
-		try {
-			return parent.findElement(by).isDisplayed();
-		}	catch (NoSuchElementException nse) {
-				logger.debug("Element '"+ by.toString() + "' not found. Returning false");
-				return false;
-			}
-
-	}
-
 	/**
 	 * 
 	 * Useful for waiting for ajaxian elements to appear and returns the result 
@@ -253,6 +219,16 @@ public class Page implements SearchContext {
 
 	}
 	
+	
+	/**
+	 * 
+	 * Useful for waiting for ajaxian elements to appear and returns the result 
+	* This will check if the element is present and wait for it to display. 
+	* @author ddcchrisk
+	* @return true if element exists and displayed within the duration 
+	* @param duration - the amount of time to wait in milliseconds for the element to be visible
+	* @param by - the element By selector
+	*/	
 	protected boolean isElementPresentAndDisplayed(final WebElement parent,
 			final By by, long durationInMilliseconds) {
 		boolean result = false;
@@ -278,11 +254,10 @@ public class Page implements SearchContext {
 	}
 	
 	/**
-	 * Useful for waiting for ajaxian elements to disappear from the page(not just be hidden) 
-	 * Does not verify if the element is displayed or not.
-	 * @author ddcchrisk
-	 * @return the WebElement if it appears
-	 * @throws Assertion error if element is not removed from DOM within duration specified   
+	* Waits for the page element to disappear from the page based on specified timeout.  
+	* 
+	* @author ddcchrisk
+	* @throws Timeout Exception if still on page at the end of specified timeout
 	 * @param duration - the amount of time to wait in milliseconds for the element to disappear before error is thrown
 	 * @param by - the element By selector
 	 */
@@ -294,7 +269,7 @@ public class Page implements SearchContext {
 				
 				if (timer.getTime() > duration) {
 					timer.stop();
-					Assert.fail("\nTimed out waiting for locator '"+by.toString()
+					throw new TimeoutException("\nTimed out waiting for locator '"+by.toString()
 							+ "' to disappear within " + TimeUnit.MILLISECONDS.toSeconds(duration) + " seconds");
 				}
 			}	
@@ -302,102 +277,84 @@ public class Page implements SearchContext {
 		
 	}
 	
+	/**
+	* Waits for the page element to disappear from the page.  
+	* 
+	* @author ddcchrisk
+	* @throws Timeout Exception if still on page at the end of default timeout
+	* @return true if the element disappears, whether it's hidden or completely removed from the DOM
+	* @param locator  the element locator 
+	*/
 	public void waitforElementToDisappear(By by) {
 		logger.info("Default Timeout: " + defaultTimeout*1000);
 		waitforElementToDisappear(by, defaultTimeout*1000);
 		
 	}
 	
-	
-	
-	/**
-	 * Useful for waiting for  elements to Hide from the page(not just be hidden) 
-	 * Does not verify if the element is displayed or not.
-	 * @author ddcchrisk
-	 * @throws Assertion error if element is not removed from DOM within duration specified   
-	 * @param duration - the amount of time to wait in milliseconds for the element to disappear before error is thrown
-	 * @param by - the element By selector
-	 */
-	public void waitforElementToHide(By by, long duration) {
-		boolean result = true;
-		if (this.isElementPresent(by)) {
-			StopWatch timer = new StopWatch();
-			timer.start();
-			while(result == true) {
-				result = driver.findElement(by).isDisplayed();
-				
-				if (timer.getTime() > duration) {
-					timer.stop();
-					Assert.fail("\nTimed out waiting for locator '"+by.toString()
-							+ "' to disappear within " + TimeUnit.MILLISECONDS.toSeconds(duration) + " seconds");
-				}
-			}	
-		}
-		
-	}
-
-	public void waitForElementNotVisible(By by, long durationInMilliseconds) {
+	  /**
+	   * An expectation for checking that an element is either invisible or not
+	   * present on the DOM, based on the specified timeout
+	   *
+	   * @param locator used to find the element
+	   * 
+	   */
+	public void waitForElementNotVisible(By locator, long durationInMilliseconds) {
 		long timeoutInSeconds = durationInMilliseconds/1000;
-		FluentWait<WebDriver> tempwait = new WebDriverWait(driver,timeoutInSeconds);
-		tempwait.until(ExpectedConditions.invisibilityOfElementLocated(by));
+		FluentWait<WebDriver> wait = new WebDriverWait(driver,timeoutInSeconds);
+		wait.until(ExpectedConditions.invisibilityOfElementLocated(locator));
 	}
 	
+	  /**
+	   * An expectation for checking that an element is either invisible or not
+	   * present on the DOM, based on the default wait timeout
+	   *
+	   * @param locator used to find the element
+	   */
 	public void waitForElementNotVisible(WebElement element, long durationInMilliseconds) {
 		long timeoutInSeconds = durationInMilliseconds/1000;
 		FluentWait<WebDriver> tempwait = new WebDriverWait(driver,timeoutInSeconds);
 		tempwait.until(ExpectedConditions.stalenessOf(element));
 	}
 
-	public void clickPage(String pageName) {
-		driver.findElement(By.xpath("//a[contains(.,'"+pageName+"')]")).click();
-		
-	}
-	
+	/**
+	   * Set the text value on the field element. Used for form inputs. 
+	   * 
+	   *
+	   * @param field element to set the value
+	   * @param text to set the field
+	   */
 	public void setValue(WebElement field, String value) {		
 		field.clear();
 		field.sendKeys(value);	
 	}
 	
-	public void setSelectedValue(Select field, String value) {
-		field.selectByValue(value);
-	}
-	
+	/**
+	   * need i say more? 
+	   * 
+	   *
+	   */	
 	public String getBrowserTitle() {
 		return driver.getTitle();
 	}
 	
-	
 	/**
-	 * @author ddcchrisk
-	 * Modifies the implicit wait time for an element. Useful for waiting for ajaxian elements. 
-	 * Does not verify if the element is displayed or not. But you can then use isDisplayed() in conjuction. 
-	 * @args wait - the amount of time to wait in milliseconds for the element to display
-	 */
-	public WebDriver implicityWait(WebDriver tempDriver, long wait) {
-		logger.warn("Switching Implicit Wait to " + wait);
-		tempDriver.manage().timeouts().implicitlyWait(wait, TimeUnit.MILLISECONDS);
-		return tempDriver;	
-	}
-	
+	   * hover on an element based on the locator 
+	   * 
+	   *
+	   */
 	public void hover(By by) {
 		hover(driver.findElement(by));
 	}
 	
+	/**
+	   * hover on the specified element 
+	   * 
+	   *
+	   */
 	public void hover(WebElement element) {
 		new Actions(driver).moveToElement(element).perform();
 	}
 	
-	public void controlClick(WebElement element) {
-		
-		Actions builder = new Actions(driver);
-	
-		builder.keyDown(Keys.CONTROL);
-		builder.click(element);
-		builder.perform();
-		builder.keyUp(Keys.CONTROL);
-		builder.perform();
-	}
-
 	@Override
 	public List<WebElement> findElements(By by) {
 		return driver.findElements(by);
@@ -408,162 +365,13 @@ public class Page implements SearchContext {
 		return driver.findElement(by);
 	}
 	
-	public String switchToTab() {
-		Set<String> windows = driver.getWindowHandles();
-		logger.info(driver.getWindowHandles().toString());
-		String windowHandle = windows.toArray()[(windows.size()-1)].toString();
-		logger.info("Switching to new tab: " + windowHandle);
-		driver.switchTo().window(windowHandle);
-		return windowHandle;
-	}
-	
+	/**
+	   * select the option based on option value, not text 
+	   * 
+	   *
+	   */
 	public void setSelectOption(WebElement field, String option) {
 		new Select(field).selectByValue(option);
-	}
-	
-	public WebElement waitForElementVisible(WebElement element) {
-		wait.until(ExpectedConditions.refreshed(ExpectedConditions.visibilityOf(element)));
-		return element;
-	}
-	
-	
-	public WebElement watchForStaleElement(By by){
-
-		WebElement slipperyElement = null;
-		
-		int count = 0; 
-		while (count < 3){
-		    try {
-		       slipperyElement= this.waitForElementDisplayed(by, 1000);
-		       break;
-		     } catch (StaleElementReferenceException e){
-		       //e.toString();
-		       logger.info("Trying to recover from a stale element :" + e.getMessage());
-		       count++ ;
-		     } catch (TimeoutException te) {
-		    	 count++;
-		     }
-		}
-		return slipperyElement;
-		
-	}
-	
-	public WebElement slipperyElement(By by) {
-		WebElement slippery = null;
-		try {
-			slippery =  this.watchForStaleElement(by);
-		} catch (StaleElementReferenceException se) {
-			slipperyElement(by);
-		} 
-		return slippery;	
-	}
-	
-	public boolean alertExists() {
-		try {
-			driver.switchTo().alert();
-			return true;
-		} catch (NoAlertPresentException na){
-			return false;
-		}
-	}
-	
-	public WebElement findElementViaText(By locator, String elementText) {
-		WebElement result = null;
-		this.waitForElementDisplayed(locator);
-		for (WebElement button : findElements(locator)) {
-			if (button.getText().equals(elementText)) {
-				result = button;
-				break;
-			}
-		}
-		
-		if (result == null) {
-			throw new NoSuchElementException("Unable to find element with text: " +elementText + " using locator: " + locator);
-		}
-		
-		return result;
-	}
-	
-	public WebElement waitForVisibleElementViaText(By locator, String elementText) {
-		WebElement result;
-		this.waitForElement(locator,false); 
-		result = waitForVisibleElementViaText(findElements(locator), elementText);
-
-		if (result == null) {
-			throw new NoSuchElementException("Unable to find element with text: '" +elementText + "' using locator: " +locator + " within " + defaultTimeout + " seconds");
-		}
-		
-		return this.waitForElementVisible(result);
-
-	}
-	
-	public WebElement waitForVisibleElementViaText(WebElement parent, By locator, String elementText) {
-		WebElement result;
-		this.waitForElement(locator,false); 
-		result = waitForVisibleElementViaText(parent.findElements(locator), elementText);
-
-		if (result == null) {
-			throw new NoSuchElementException("Unable to find element with text: '" +elementText + "' using locator: " +locator + " within " + defaultTimeout + " seconds");
-		}
-		
-		return this.waitForElementVisible(result);
-
-	}
-	
-	private WebElement waitForVisibleElementViaText(List<WebElement> elements, String elementText) {
-		WebElement result = null;
-		StopWatch timer  = new StopWatch();
-		timer.start();
-		while (timer.getTime() < defaultTimeoutInMilliseconds && result == null) {
-			for (WebElement element : elements) {
-				String displayedText = element.getText(); 
-				if (displayedText.equals(elementText)) {
-					result = element;
-					break;
-				}
-			}	
-		}
-		
-		return result; 
-	}
-	
-	public WebElement getFirstVisibleElement(By locator) {
-		WebElement visible = null ;
-		for (WebElement element : driver.findElements(locator)) {
-			if (element.isDisplayed()) {
-				visible = element;
-				break;
-			} 
-		}
-		
-		if (visible == null) 
-			throw new NoSuchElementException("Unable to find any visible element using locator: " + locator);
-		
-		return visible;
-	}
-
-	public WebElement findElementViaPartialText(By locator, String elementText) {
-		WebElement result = null;
-		this.waitForElementDisplayed(locator);
-		for (WebElement button : findElements(locator)) {
-			if (button.getText().contains(elementText)) {
-				result = button;
-			}
-		}
-		
-		if (result == null) {
-			throw new NoSuchElementException("Unable to find element with text: " +elementText + " using locator: " + locator);
-		}
-		
-		return result;
-	}
-	
-	public WebElement waitForDOM(By locator) {
-		findElement(By.cssSelector("body"));
-		JavascriptExecutor js = (JavascriptExecutor) driver;
-		//ddcchrisk - I dont' think this js script will work
-		js.executeScript("_.defer(function() { $('body').append(\"<div id='#{"+locator.toString()+"}'></div>\");});");
-		return findElement(locator);
-	}
+	}	
 
 }

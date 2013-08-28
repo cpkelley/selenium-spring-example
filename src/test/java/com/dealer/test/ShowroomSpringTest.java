@@ -21,9 +21,6 @@ import com.dealer.test.ModelLineupPage;
 import com.dealer.test.SeleniumManager;
 import com.dealer.test.ShowroomDetailsPage;
 
-
-
-
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:cucumber.xml" })
 public class ShowroomSpringTest {
