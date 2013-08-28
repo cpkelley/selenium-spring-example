@@ -10,14 +10,18 @@ import org.openqa.selenium.WebElement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+/**
+ * Page Object - Abstract representation of a CMS page. All other CMS page objects should inheret from this page. 
+ * Parent class is top level Page class.
+ * 
+ * @author ddcchrisk
+ *  
+ */
 @Component("cms")
 public class CmsPage extends Page {
 
-	private String page = "/index.htm";
-	protected String supportedText = "Not Supported for " + this.getClass().getSimpleName();
-	
-	public static final By MENU_ITEM = By.cssSelector(".nav-list .nav-children a") ;
-	public static final By SUB_MENU_ITEM = By.cssSelector(".nav-list .nav-children ul li a") ;
+	public static final By menu_item = By.cssSelector(".nav-list .nav-children a") ;
+	public static final By submenu_item = By.cssSelector(".nav-list .nav-children ul li a") ;
 
 	public CmsPage(SeleniumManager sm) {
 		super(sm);
@@ -27,8 +31,15 @@ public class CmsPage extends Page {
 	public CmsPage() {
 		super();
 	}
-	//Include any methods, variables or classes that may be access from several cms pages 
 	
+	/**
+	 * Opens the homepage of the account specified
+	 * Example: open("ddctest0001")
+	 * will open http://ddctest0001.cms.qa.dealer.com/index.htm 
+	 * 
+	 * @param accountId
+	 * @param pageUrl
+	 */	
 	public void open(String accountId) {
 		String page = "http://"
 			+ accountId 
@@ -37,45 +48,38 @@ public class CmsPage extends Page {
 		
 		logger.info("Opening: " +page) ;
 		driver.get(page);
-
-		
+	
 	}
 	
-	public void openPage(String accountId, String pageURL) {
+
+	/**
+	 * Opens the page of the account specified
+	 * Example: openPage("ddctest0001", "/showroom/index.htm")
+	 * will open http://ddctest0001.cms.qa.dealer.com/showroom/index.htm 
+	 * 
+	 * @param accountId
+	 * @param pageUrl
+	 */
+	public void openPage(String accountId, String pageUrl) {
 		String page = "http://"+ accountId 
 			+ sm.getCmsHost()
-			+ pageURL;
+			+ pageUrl;
 		 
 		logger.info("Opening: "+page) ;
 		driver.get(page);
 		
 	}
 	
-	public String getPage() {
-		return page;
-	}
-
-	public void setPage(String page) {
-		this.page = page;
-	}
-
-	
     public List<WebElement> getMenuItems() {
-        return driver.findElements(MENU_ITEM);
+        return driver.findElements(menu_item);
 	}
 	
 	public List<WebElement> getSubMenuItems() {
-		return driver.findElements(SUB_MENU_ITEM);
+		return driver.findElements(submenu_item);
 	}
 		
-	public String formatPrice(String price) {
-		String p = price.replaceAll("[^0-9]", "");
-		logger.debug("Formatted Price: "+p);
-		return p ;
-	}
-
 	public void waitForSubMenuItems() {
-		this.isElementPresent(SUB_MENU_ITEM, 3000);
+		this.isElementPresent(submenu_item, 3000);
 	}
 	
 
